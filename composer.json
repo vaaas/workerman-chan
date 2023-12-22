@@ -1,6 +1,7 @@
 {
 	"scripts": {
-		"check": "./vendor/bin/phpstan analyse --level 9 src lib"
+		"check": "./vendor/bin/phpstan analyse --level 9 src lib",
+		"start": "composer dump-autoload ; php index.php start"
 	},
 	"autoload": {
 		"psr-4": {

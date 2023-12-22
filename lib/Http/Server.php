@@ -1,6 +1,7 @@
 <?php
-namespace Lib;
+namespace Lib\Http;
 
+use Closure;
 use Error;
 use JsonSerializable;
 use Stringable;
@@ -10,49 +11,47 @@ use Workerman\Connection\TcpConnection;
 use Workerman\Protocols\Http\Request;
 use Workerman\Protocols\Http\Response;
 
-final class HttpServer {
+final class Server {
 	private Worker $worker;
 
-	/** @param callable(Request): mixed $request_handler */
-	public function __construct(string $host, int $port, int $processes, callable $request_handler) {
+	/** @var Closure(Request): mixed */
+	private Closure $request_handler;
+
+	/** @param Closure(Request): mixed $request_handler */
+	public function __construct(string $host, int $port, int $processes, Closure $request_handler) {
 		$this->worker = new Worker("http://$host:$port");
 		$this->worker->count = $processes;
-		$this->worker->onMessage = self::onMessage($request_handler);
+		$this->worker->onMessage = $this->onMessage(...);
+		$this->request_handler = $request_handler;
 	}
 
-	/**
-	 * @param callable(Request): mixed $request_handler
-	 * @return callable(TcpConnection, Request): void
-	 */
-	private static function onMessage($request_handler): callable {
-		return static function (TcpConnection $connection, Request $request) use ($request_handler): void {
-			try {
-				$response = $request_handler($request);
-			} catch (Throwable $e) {
-				$response = $e;
-				error_log(self::errorLogString($e));
-			}
+	private function onMessage(TcpConnection $connection, Request $request): void {
+		try {
+			$response = ($this->request_handler)($request);
+		} catch (Throwable $e) {
+			$response = $e;
+			error_log(self::errorLogString($e));
+		}
 
-			$connection->send(self::makeResponse($response));
-		};
+		$connection->send(self::makeResponse($response));
 	}
 
 	private static function makeResponse(mixed $response): Response {
-		if ($response instanceof Response) {
+		if ($response instanceof Response)
 			return $response;
-		} else if ($response instanceof JsonSerializable) {
+		else if ($response instanceof JsonSerializable)
 			return self::fromJson($response);
-		} else if ($response instanceof Stringable) {
-			return new Response(200, ['content-type' => 'text/plain'], $response->__toString());
-		} else if ($response instanceof Error) {
+		else if ($response instanceof Throwable)
 			return self::fromError($response);
-		} else if (is_array($response)) {
+		else if ($response instanceof Stringable)
+			return new Response(200, ['content-type' => 'text/plain'], $response->__toString());
+		else if (is_array($response))
 			return self::fromJson($response);
-		} else if (is_string($response)) {
+		else if (is_string($response))
 			return new Response(200, ['content-type' => 'text/plain'], $response);
-		} else if (is_numeric($response)) {
+		else if (is_numeric($response))
 			return new Response(200, ['content-type' => 'text/plain'], strval($response));
-		} else {
+		else {
 			$msg = 'Invalid return type. Expected one of string, int, array, JsonSerializable, Stringable, Throwable, Response, got ' . self::typeName($response);
 			error_log($msg);
 			return new Response(500, ['content-type' => 'text/plain'], $msg);
@@ -65,7 +64,10 @@ final class HttpServer {
 	}
 
 	private static function fromError(Throwable $error): Response {
-		return new Response(500, ['content-type' => 'text/plain'], $error->getMessage());
+		$code = $error->getCode();
+		if ($code === 0)
+			$code = 500;
+		return new Response($code, ['content-type' => 'text/plain'], $error->getMessage());
 	}
 
 	private static function errorLogString(Throwable $error): string {
