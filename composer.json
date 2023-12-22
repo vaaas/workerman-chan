@@ -1,0 +1,17 @@
+{
+	"scripts": {
+		"check": "./vendor/bin/phpstan analyse --level 9 src lib"
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "src/",
+			"Lib\\": "lib/"
+		}
+	},
+	"require": {
+		"workerman/workerman": "^4.1"
+	},
+	"require-dev": {
+		"phpstan/phpstan": "^1.10"
+	}
+}
