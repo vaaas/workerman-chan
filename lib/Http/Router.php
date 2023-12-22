@@ -16,7 +16,7 @@ final class Router {
 	) {}
 
 	/** @param array<Route> $routes */
-	public static function make(array $routes = []): Router {
+	public static function construct(array $routes = []): Router {
 		return new Router($routes);
 	}
 

@@ -4,7 +4,6 @@ namespace App;
 use Lib\Http\Router;
 use Lib\Http\Server;
 use Workerman\Protocols\Http\Request;
-use Workerman\Protocols\Http\Response;
 use Workerman\Worker;
 
 final class App {
@@ -15,13 +14,16 @@ final class App {
 	}
 
 	private function router(): Router {
-		return Router::make()
+		return Router::construct()
 			->get('/', function (Request $request) {
 				return 'Hello, world!';
+			})
+			->get('/favicon.ico', function (Request $request) {
+				return 'favicon';
 			});
 	}
 
-	public static function start(): App {
+	public static function construct(): App {
 		$app = new App();
 		Worker::runAll();
 		return $app;
