@@ -1,8 +1,6 @@
 <?php
 namespace Lib\Http;
 
-use Closure;
-use Error;
 use JsonSerializable;
 use Stringable;
 use Throwable;
@@ -14,11 +12,11 @@ use Workerman\Protocols\Http\Response;
 final class Server {
 	private Worker $worker;
 
-	/** @var Closure(Request): mixed */
-	private Closure $request_handler;
+	/** @var callable(Request): mixed */
+	private $request_handler;
 
-	/** @param Closure(Request): mixed $request_handler */
-	public function __construct(string $host, int $port, int $processes, Closure $request_handler) {
+	/** @param callable(Request): mixed $request_handler */
+	public function __construct(string $host, int $port, int $processes, callable $request_handler) {
 		$this->worker = new Worker("http://$host:$port");
 		$this->worker->count = $processes;
 		$this->worker->onMessage = $this->onMessage(...);

@@ -1,7 +1,6 @@
 <?php
 namespace Lib\Http\Router;
 
-use Closure;
 use Lib\Http\Router\Handlers;
 use Workerman\Protocols\Http\Request;
 
@@ -10,11 +9,11 @@ final class Route {
 	public Handlers $handlers;
 	private string $regex;
 
-	/** @param Closure(Request): mixed $handler */
+	/** @param callable(Request): mixed $handler */
 	public function __construct(
 		string $test,
 		string $verb,
-		Closure $handler,
+		callable $handler,
 	) {
 		$this->test = $test;
 		$this->handlers = Handlers::of($verb, $handler);

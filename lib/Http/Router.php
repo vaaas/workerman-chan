@@ -2,7 +2,6 @@
 
 namespace Lib\Http;
 
-use Closure;
 use Lib\Http\Router\Route;
 use Lib\Http\NotFound;
 use Lib\Http\InvalidVerbException;
@@ -20,53 +19,53 @@ final class Router {
 		return new Router($routes);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function get(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function get(string $test, callable $handler): Router {
 		return $this->add($test, 'GET', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function head(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function head(string $test, callable $handler): Router {
 		return $this->add($test, 'HEAD', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function post(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function post(string $test, callable $handler): Router {
 		return $this->add($test, 'POST', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function put(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function put(string $test, callable $handler): Router {
 		return $this->add($test, 'PUT', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function delete(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function delete(string $test, callable $handler): Router {
 		return $this->add($test, 'DELETE', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function patch(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function patch(string $test, callable $handler): Router {
 		return $this->add($test, 'PATCH', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function options(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function options(string $test, callable $handler): Router {
 		return $this->add($test, 'OPTIONS', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function connect(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function connect(string $test, callable $handler): Router {
 		return $this->add($test, 'CONNECT', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function trace(string $test, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function trace(string $test, callable $handler): Router {
 		return $this->add($test, 'TRACE', $handler);
 	}
 
-	/** @param Closure(Request): mixed $handler */
-	public function add(string $test, string $verb, Closure $handler): Router {
+	/** @param callable(Request): mixed $handler */
+	public function add(string $test, string $verb, callable $handler): Router {
 		$route = $this->find($test);
 		if ($route)
 			$route->handlers->set($verb, $handler);
@@ -105,5 +104,9 @@ final class Router {
 		}
 
 		return new NotFound('Not found: '. $path);
+	}
+
+	public function __invoke(Request $request): mixed {
+		return $this->route($request);
 	}
 }

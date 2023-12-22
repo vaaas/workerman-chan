@@ -2,35 +2,34 @@
 
 namespace Lib\Http\Router;
 
-use Closure;
 use Lib\Http\InvalidVerbException;
 use Workerman\Protocols\Http\Request;
 
 final class Handlers {
 	/**
-	 * @param Closure(Request): mixed $GET
-	 * @param Closure(Request): mixed $HEAD
-	 * @param Closure(Request): mixed $POST
-	 * @param Closure(Request): mixed $PUT
-	 * @param Closure(Request): mixed $DELETE
-	 * @param Closure(Request): mixed $PATCH
-	 * @param Closure(Request): mixed $OPTIONS
-	 * @param Closure(Request): mixed $CONNECT
-	 * @param Closure(Request): mixed $TRACE
+	 * @param ?callable(Request): mixed $GET
+	 * @param ?callable(Request): mixed $HEAD
+	 * @param ?callable(Request): mixed $POST
+	 * @param ?callable(Request): mixed $PUT
+	 * @param ?callable(Request): mixed $DELETE
+	 * @param ?callable(Request): mixed $PATCH
+	 * @param ?callable(Request): mixed $OPTIONS
+	 * @param ?callable(Request): mixed $CONNECT
+	 * @param ?callable(Request): mixed $TRACE
 	 */
 	public function __construct(
-		public ?Closure $GET,
-		public ?Closure $HEAD,
-		public ?Closure $POST,
-		public ?Closure $PUT,
-		public ?Closure $DELETE,
-		public ?Closure $PATCH,
-		public ?Closure $OPTIONS,
-		public ?Closure $CONNECT,
-		public ?Closure $TRACE,
+		public $GET,
+		public $HEAD,
+		public $POST,
+		public $PUT,
+		public $DELETE,
+		public $PATCH,
+		public $OPTIONS,
+		public $CONNECT,
+		public $TRACE,
 	) {}
 
-	public static function of(string $verb, Closure $fun): Handlers {
+	public static function of(string $verb, callable $fun): Handlers {
 		switch ($verb) {
 			case 'GET':
 				return new Handlers($fun, null, null, null, null, null, null, null, null);
@@ -64,7 +63,7 @@ final class Handlers {
 		}
 	}
 
-	public function set(string $verb, Closure $fun): Handlers {
+	public function set(string $verb, callable $fun): Handlers {
 		switch ($verb) {
 			case 'GET':
 				$this->GET = $fun;

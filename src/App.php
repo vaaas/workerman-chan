@@ -10,7 +10,7 @@ final class App {
 	public Server $httpServer;
 
 	public function __construct() {
-		$this->httpServer = new Server('0.0.0.0', 8000, 4, $this->router()->route(...));
+		$this->httpServer = new Server('0.0.0.0', 8000, 4, $this->router());
 	}
 
 	private function router(): Router {
