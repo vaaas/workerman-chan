@@ -40,4 +40,21 @@ class Arr implements IteratorAggregate {
 			array_push($xs, $f($x));
 		return new Arr($xs);
 	}
+
+	/** @param T $x */
+	public function add(mixed $x): void {
+		array_push($this->entries, $x);
+	}
+
+	/**
+	 * @param callable(T): bool $f
+	 * @return ?T
+	 */
+	public function find(callable $f): mixed {
+		foreach ($this as $x) {
+			if ($f($x))
+				return $x;
+		}
+		return null;
+	}
 }

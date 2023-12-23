@@ -2,6 +2,7 @@
 
 namespace Lib\Http;
 
+use Lib\Arr;
 use Lib\Http\Router\Route;
 use Lib\Http\NotFound;
 use Lib\Http\InvalidVerbException;
@@ -9,13 +10,13 @@ use Lib\Http\MethodNotAllowed;
 use Workerman\Protocols\Http\Request;
 
 final class Router {
-	/** @param array<Route> $routes */
+	/** @param Arr<Route> $routes */
 	public function __construct(
-		public array $routes
+		public Arr $routes = new Arr()
 	) {}
 
-	/** @param array<Route> $routes */
-	public static function construct(array $routes = []): Router {
+	/** @param Arr<Route> $routes */
+	public static function construct(Arr $routes = new Arr()): Router {
 		return new Router($routes);
 	}
 
@@ -66,24 +67,12 @@ final class Router {
 
 	/** @param callable(Request): mixed $handler */
 	public function add(string $test, string $verb, callable $handler): Router {
-		$route = $this->find($test);
+		$route = $this->routes->find(fn($x) => $x->test === $test);
 		if ($route)
 			$route->handlers->set($verb, $handler);
 		else
-			$this->push(new Route($test, $verb, $handler));
+			$this->routes->add(new Route($test, $verb, $handler));
 		return $this;
-	}
-
-	private function find(string $test): ?Route {
-		foreach ($this->routes as $route) {
-			if ($route->test === $test)
-				return $route;
-		}
-		return null;
-	}
-
-	private function push(Route $route): void {
-		array_push($this->routes, $route);
 	}
 
 	public function route(Request $request): mixed {
