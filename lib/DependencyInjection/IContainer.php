@@ -1,5 +1,9 @@
 <?php
 
+namespace Lib\DependencyInjection;
+
+use Closure;
+
 interface IContainer {
 	/**
 	 * @template T of object
@@ -8,13 +12,18 @@ interface IContainer {
 	 */
 	public function construct(string $class): object;
 
-	public function call(callable $f): mixed;
-
-	public static function getInstance(): IContainer;
+	public function call(Closure $f): mixed;
 
 	/**
 	 * @param class-string $interface
 	 * @param class-string $implementation
 	 */
 	public function register(string $interface, string $implementation): IContainer;
+
+	/**
+	 * @template T of object
+	 * @param class-string<T> $class
+	 * @return IContainer
+	 */
+	public function add(string $class, object $instance): IContainer;
 }
