@@ -11,7 +11,7 @@ use Traversable;
  * @template V
  * @implements IteratorAggregate<K, V>
  */
-class SMap implements IteratorAggregate {
+final class SMap implements IteratorAggregate {
 	/** @param array<K, V> $entries */
 	public function __construct(
 		private array $entries = []

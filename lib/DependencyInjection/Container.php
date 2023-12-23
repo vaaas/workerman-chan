@@ -13,7 +13,7 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-class Container implements IContainer {
+final class Container implements IContainer {
 	/**
 	 * @param SMap<class-string, class-string> $interfaces
 	 * @param SMap<class-string, object> $instances
@@ -35,9 +35,8 @@ class Container implements IContainer {
 	/**
 	 * @template T of object
 	 * @param class-string<T> $class
-	 * @return IContainer
 	 */
-	public function add(string $class, object $instance): IContainer {
+	public function add(string $class, object $instance): Container {
 		$instances[$class] = $instance;
 		return $this;
 	}

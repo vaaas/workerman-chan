@@ -10,7 +10,7 @@ use Traversable;
  * @template T
  * @implements IteratorAggregate<int, T>
  */
-class Arr implements IteratorAggregate {
+final class Arr implements IteratorAggregate {
 	/**
 	 * @template X
 	 * @param X[] $entries
