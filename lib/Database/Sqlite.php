@@ -35,7 +35,13 @@ class Sqlite implements IDatabase {
 		if ($existing->empty())
 			return;
 		$missing = Arr::from($migrations)->filter($existing->has(...));
-		foreach ($missing as $migration)
+		foreach ($missing as $migration) {
 			$migration::run($this);
+			$this->query("insert into migrations values ($migration)");
+		}
+	}
+
+	public static function escape(string $x): string {
+		return SQLite3::escapeString($x);
 	}
 }

@@ -11,4 +11,6 @@ interface IDatabase {
 
 	/** @param class-string<IMigration> $migrations */
 	public function migrate(string ...$migrations): void;
+
+	public static function escape(string $x): string;
 }
