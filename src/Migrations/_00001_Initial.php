@@ -10,7 +10,25 @@ class _00001_Initial implements IMigration {
 		$db->query('create table boards (
 			id integer primary key autoincrement,
 			handle text unique not null,
-			title text not null
+			title text not null,
+			description text not null
+		)');
+
+		$db->query('create table posts (
+			id integer primary key autoincrement,
+			thread integer,
+			board integer,
+			title text,
+			contents text,
+			created_at integer not null
+		)');
+
+		$db->query('create table attachments (
+			post integer primary key,
+			name text,
+			contents blob,
+			thumbnail blob,
+			sfw integer
 		)');
 	}
 }
