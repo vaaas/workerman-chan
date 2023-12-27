@@ -34,7 +34,6 @@ class Sqlite implements IDatabase {
 		$existing = $this->query('select migrations.migration from migrations');
 		if ($existing->empty())
 			return;
-		/** @var Arr<class-string<IMigration>> */
 		$missing = Arr::from($migrations)->filter($existing->has(...));
 		foreach ($missing as $migration)
 			$migration::run($this);
