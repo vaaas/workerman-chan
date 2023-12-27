@@ -21,7 +21,20 @@ final class Container implements IContainer {
 	public function __construct(
 		private SMap $interfaces = new SMap(),
 		private SMap $instances = new SMap(),
-	) {}
+	) {
+		$this->add(IContainer::class, $this);
+	}
+
+	/**
+	 * @param SMap<class-string, class-string> $interfaces
+	 * @param SMap<class-string, object> $instances
+	 */
+	public static function construct(
+		SMap $interfaces = new SMap(),
+		SMap $instances = new SMap()
+	): Container {
+		return new Container($interfaces, $instances);
+	}
 
 	/**
 	 * @param class-string $interface
@@ -46,7 +59,7 @@ final class Container implements IContainer {
 	 * @param class-string<T> $class
 	 * @return T
 	 */
-	public function construct(string $class): object {
+	public function get(string $class): object {
 		if ($this->instances->has($class))
 			/** @var T */
 			return $this->instances->get($class);
@@ -93,6 +106,6 @@ final class Container implements IContainer {
 			throw new UnsupportedType($x->getName());
 		/** @var class-string */
 		$class = $type->getName();
-		return $this->construct($class);
+		return $this->get($class);
 	}
 }

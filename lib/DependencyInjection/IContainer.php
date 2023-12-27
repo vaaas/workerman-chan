@@ -10,7 +10,7 @@ interface IContainer {
 	 * @param class-string<T> $class
 	 * @return T
 	 */
-	public function construct(string $class): object;
+	public function get(string $class): object;
 
 	public function call(Closure $f): mixed;
 

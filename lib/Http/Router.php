@@ -9,7 +9,7 @@ use Lib\Http\InvalidVerbException;
 use Lib\Http\MethodNotAllowed;
 use Workerman\Protocols\Http\Request;
 
-final class Router {
+class Router {
 	/** @param Arr<Route> $routes */
 	public function __construct(
 		public Arr $routes = new Arr()

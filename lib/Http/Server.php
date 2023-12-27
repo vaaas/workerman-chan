@@ -9,7 +9,7 @@ use Workerman\Connection\TcpConnection;
 use Workerman\Protocols\Http\Request;
 use Workerman\Protocols\Http\Response;
 
-final class Server {
+class Server {
 	private Worker $worker;
 
 	/** @var callable(Request): mixed */
