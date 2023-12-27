@@ -57,4 +57,28 @@ final class Arr implements IteratorAggregate {
 		}
 		return null;
 	}
+
+	public function count(): int {
+		return count($this->entries);
+	}
+
+	public function empty(): bool {
+		return $this->count() === 0;
+	}
+
+	/**
+	 * @param callable(T): bool $f
+	 * @return Arr<T>
+	 */
+	public function filter(callable $f): Arr {
+		$xs = new Arr();
+		foreach ($this as $x)
+			if ($f($x))
+				$xs->add($x);
+		return $xs;
+	}
+
+	public function has(mixed $x): bool {
+		return in_array($x, $this->entries);
+	}
 }

@@ -26,4 +26,17 @@ class Sqlite implements IDatabase {
 		}
 		return $results;
 	}
+
+	/** @param class-string<IMigration> $migrations */
+	public function migrate(string ...$migrations): void {
+		$this->query('create table if not exists migrations (migration text primary key)');
+		/** @var Arr<class-string<IMigration>> */
+		$existing = $this->query('select migrations.migration from migrations');
+		if ($existing->empty())
+			return;
+		/** @var Arr<class-string<IMigration>> */
+		$missing = Arr::from($migrations)->filter($existing->has(...));
+		foreach ($missing as $migration)
+			$migration::run($this);
+	}
 }
