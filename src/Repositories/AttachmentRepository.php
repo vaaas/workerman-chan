@@ -16,7 +16,7 @@ class AttachmentRepository {
 				name,
 				contents
 			from attachments
-			where id = $id
+			where post = $id
 		");
 		if ($results->empty())
 			return null;
@@ -31,7 +31,7 @@ class AttachmentRepository {
 			select
 				thumbnail
 			from attachments
-			where id = $id
+			where post = $id
 		");
 		if ($results->empty())
 			return null;
