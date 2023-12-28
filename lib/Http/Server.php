@@ -2,6 +2,7 @@
 namespace Lib\Http;
 
 use JsonSerializable;
+use Lib\Mimetype\Mimetype;
 use Stringable;
 use Throwable;
 use Workerman\Worker;
@@ -42,30 +43,30 @@ class Server {
 		else if ($response instanceof Throwable)
 			return self::fromError($response);
 		else if ($response instanceof Stringable)
-			return new Response(200, ['Content-Type' => 'text/plain'], $response->__toString());
+			return new Response(200, ['Content-Type' => Mimetype::TXT], $response->__toString());
 		else if (is_array($response))
 			return self::fromJson($response);
 		else if (is_string($response))
-			return new Response(200, ['Content-Type' => 'text/plain'], $response);
+			return new Response(200, ['Content-Type' => Mimetype::TXT], $response);
 		else if (is_numeric($response))
-			return new Response(200, ['Content-Type' => 'text/plain'], strval($response));
+			return new Response(200, ['Content-Type' => Mimetype::TXT], strval($response));
 		else {
 			$msg = 'Invalid return type. Expected one of string, int, array, JsonSerializable, Stringable, Throwable, Response, got ' . self::typeName($response);
 			error_log($msg);
-			return new Response(500, ['Content-Type' => 'text/plain'], $msg);
+			return new Response(500, ['Content-Type' => Mimetype::TXT], $msg);
 		}
 	}
 
 	/** @param JsonSerializable|array<mixed> $response */
 	private static function fromJson(JsonSerializable|array $response): Response {
-		return new Response(200, ['Content-Type' => 'application/json'], self::safeJsonEncode($response));
+		return new Response(200, ['Content-Type' => Mimetype::JSON], self::safeJsonEncode($response));
 	}
 
 	private static function fromError(Throwable $error): Response {
 		$code = $error->getCode();
 		if ($code === 0)
 			$code = 500;
-		return new Response($code, ['Content-Type' => 'text/plain'], $error->getMessage());
+		return new Response($code, ['Content-Type' => Mimetype::TXT], $error->getMessage());
 	}
 
 	private static function errorLogString(Throwable $error): string {

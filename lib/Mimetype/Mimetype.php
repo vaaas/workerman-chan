@@ -5,6 +5,8 @@ enum Mimetype: string {
 	case HTML = 'text/html';
 	case TXT = 'text/plain';
 
+	case JSON = 'application/json';
+
 	case AVIF = 'image/avif';
 	case GIF = 'image/gif';
 	case JPEG = 'image/jpeg';
