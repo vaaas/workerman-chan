@@ -72,6 +72,7 @@ final class Container implements IContainer {
 				throw new Exception("Interface $interface does not have a registered implementation");
 			/** @var class-string */
 			$class = $this->interfaces->get($interface);
+			$reflection = new ReflectionClass($class);
 		} else
 			$interface = null;
 
