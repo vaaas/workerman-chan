@@ -3,10 +3,14 @@ namespace App\Views;
 
 use App\Views\Layouts\DefaultLayout;
 
-class Frontpage {
+final class Frontpage {
 	public function __construct(
 		private string $title,
 	) {}
+
+	public static function construct(string $title): Frontpage {
+		return new Frontpage($title);
+	}
 
 	public function render(): string {
 		return DefaultLayout::construct()

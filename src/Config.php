@@ -17,11 +17,13 @@ class WebConfig {
 	public string $host;
 	public int $port;
 	public int $processes;
+	public string $public;
 
 	public function __construct() {
 		$this->host = '0.0.0.0';
 		$this->port = 8000;
 		$this->processes = 4;
+		$this->public = getcwd() . '/public';
 	}
 }
 
@@ -29,6 +31,6 @@ class DBConfig {
 	public string $filename;
 
 	public function __construct() {
-		$this->filename = __DIR__ . '/db.sqlite3';
+		$this->filename = getcwd() . '/db.sqlite3';
 	}
 }

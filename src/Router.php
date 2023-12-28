@@ -1,25 +1,20 @@
 <?php
 namespace App;
 
-use App\Views\Frontpage;
+use App\Controllers\IndexController;
+use App\Controllers\StaticController;
 use Lib\Http\Router as BaseRouter;
 use Workerman\Protocols\Http\Request;
-use Workerman\Protocols\Http\Response;
 
 class Router extends BaseRouter {
-	public function __construct(Config $config) {
+	public function __construct(
+		IndexController $indexController,
+		StaticController $staticController,
+	) {
 		parent::__construct();
 
 		$this
-			->get('/', function (Request $request) use ($config) {
-				return new Response(
-					200,
-					['content-type' => 'text/html'],
-					(new Frontpage($config->title))->render()
-				);
-			})
-			->get('/favicon.ico', function (Request $request) {
-				return 'favicon';
-			});
+			->get('/', [$indexController, 'index'])
+			->get('/favicon.ico', [$staticController, 'serve']);
 	}
 }
