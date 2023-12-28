@@ -7,14 +7,14 @@ use Lib\Database\IMigration;
 
 class _00001_Initial implements IMigration {
 	public static function run(IDatabase $db): void {
-		$db->query('create table boards (
+		$db->exec('create table boards (
 			id integer primary key autoincrement,
 			handle text unique not null,
 			title text not null,
 			description text not null
 		)');
 
-		$db->query('create table posts (
+		$db->exec('create table posts (
 			id integer primary key autoincrement,
 			thread integer,
 			board integer,
@@ -23,7 +23,7 @@ class _00001_Initial implements IMigration {
 			created_at integer not null
 		)');
 
-		$db->query('create table attachments (
+		$db->exec('create table attachments (
 			post integer primary key,
 			name text not null,
 			contents blob not null,
