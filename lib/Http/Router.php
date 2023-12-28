@@ -20,52 +20,42 @@ class Router {
 		return new Router($routes);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function get(string $test, callable $handler): Router {
 		return $this->add($test, 'GET', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function head(string $test, callable $handler): Router {
 		return $this->add($test, 'HEAD', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function post(string $test, callable $handler): Router {
 		return $this->add($test, 'POST', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function put(string $test, callable $handler): Router {
 		return $this->add($test, 'PUT', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function delete(string $test, callable $handler): Router {
 		return $this->add($test, 'DELETE', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function patch(string $test, callable $handler): Router {
 		return $this->add($test, 'PATCH', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function options(string $test, callable $handler): Router {
 		return $this->add($test, 'OPTIONS', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function connect(string $test, callable $handler): Router {
 		return $this->add($test, 'CONNECT', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function trace(string $test, callable $handler): Router {
 		return $this->add($test, 'TRACE', $handler);
 	}
 
-	/** @param callable(Request): mixed $handler */
 	public function add(string $test, string $verb, callable $handler): Router {
 		$route = $this->routes->find(fn($x) => $x->test === $test);
 		if ($route)
