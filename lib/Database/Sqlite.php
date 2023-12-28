@@ -5,6 +5,7 @@ namespace Lib\Database;
 use Lib\Arr;
 use Lib\Database\IDatabase;
 use Lib\Database\QueryException;
+use ReflectionClass;
 use SQLite3;
 
 class Sqlite implements IDatabase {
@@ -27,17 +28,23 @@ class Sqlite implements IDatabase {
 		return $results;
 	}
 
+	public function exec(string $query): void {
+		$this->db->exec($query);
+	}
+
 	/** @param class-string<IMigration> $migrations */
 	public function migrate(string ...$migrations): void {
-		$this->query('create table if not exists migrations (migration text primary key)');
+		$this->exec('create table if not exists migrations (migration text primary key)');
 		/** @var Arr<class-string<IMigration>> */
 		$existing = $this->query('select migrations.migration from migrations');
-		if ($existing->empty())
+		$missing = Arr::from($migrations)->filter($existing->hasNot(...));
+		if ($missing->empty())
 			return;
-		$missing = Arr::from($migrations)->filter($existing->has(...));
 		foreach ($missing as $migration) {
+			$short = (new ReflectionClass($migration))->getShortName();
+			error_log('Running migration: ' . $short);
 			$migration::run($this);
-			$this->query("insert into migrations values ($migration)");
+			$this->exec("insert into migrations values ('$short')");
 		}
 	}
 
