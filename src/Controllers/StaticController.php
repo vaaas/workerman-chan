@@ -14,14 +14,14 @@ final class StaticController {
 		$this->public = $config->web->public;
 	}
 
-	public function serve(Request $request): Response {
+	public function serve(Request $request): Exception|Response {
 		$pathname = $this->public . $request->path();
 		if (!file_exists($pathname))
-			throw new NotFound('Not found: ' . $request->path());
+			return new NotFound('Not found: ' . $request->path());
 
 		$contents = file_get_contents($pathname);
 		if ($contents === false)
-			throw new Exception('Error reading file: ' . $request->path());
+			return new Exception('Error reading file: ' . $request->path());
 
 		return new Response(
 			200,

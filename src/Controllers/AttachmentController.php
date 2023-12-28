@@ -11,11 +11,11 @@ class AttachmentController {
 		private AttachmentRepository $attachmentRepository,
 	) {}
 
-	public function getAttachment(Request $req, string $id): Response {
+	public function getAttachment(Request $req, string $id): NotFound|Response {
 		$parsed = intval($id);
 		$attachment = $this->attachmentRepository->getContents($parsed);
 		if (!$attachment)
-			throw new NotFound();
+			return new NotFound();
 		return new Response(
 			200,
 			['Content-Type' => $attachment->mimetype()],
@@ -23,11 +23,11 @@ class AttachmentController {
 		);
 	}
 
-	public function getThumbnail(Request $req, string $id): Response {
+	public function getThumbnail(Request $req, string $id): NotFound|Response {
 		$parsed = intval($id);
 		$thumbnail = $this->attachmentRepository->getThumbnail($parsed);
 		if (!$thumbnail)
-			throw new NotFound();
+			return new NotFound();
 		return new Response(
 			200,
 			['Content-Type' => $thumbnail->mimetype],
