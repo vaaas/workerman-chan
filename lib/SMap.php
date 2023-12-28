@@ -17,7 +17,7 @@ final class SMap implements IteratorAggregate {
 		private array $entries = []
 	) {}
 
-	/** @param K $k */
+	/** @phpstan-assert K $k */
 	public function has(string $k): bool {
 		return array_key_exists($k, $this->entries);
 	}
