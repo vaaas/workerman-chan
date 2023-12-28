@@ -5,6 +5,7 @@ namespace Lib\Database;
 use Lib\Arr;
 use Lib\Database\IDatabase;
 use Lib\Database\QueryException;
+use Lib\Generator;
 use ReflectionClass;
 use SQLite3;
 
@@ -16,16 +17,18 @@ class Sqlite implements IDatabase {
 	}
 
 	public function query(string $query): Arr {
+		return $this->stream($query)->materialise();
+	}
+
+	public function stream(string $query): Generator {
 		$cursor = $this->db->query($query);
 		if ($cursor === false)
 			throw new QueryException($query);
-		$results = new Arr();
-		$row = $cursor->fetchArray();
-		while ($row !== false) {
-			$results->add($row);
+		return Generator::repeatedly(function() use ($cursor) {
+			/** @var array<string, mixed>|false */
 			$row = $cursor->fetchArray();
-		}
-		return $results;
+			return $row === false ? null : $row;
+		});
 	}
 
 	public function exec(string $query): void {
