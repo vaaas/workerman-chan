@@ -25,10 +25,10 @@ class _00001_Initial implements IMigration {
 
 		$db->query('create table attachments (
 			post integer primary key,
-			name text,
-			contents blob,
+			name text not null,
+			contents blob not null,
 			thumbnail blob,
-			sfw integer
+			sfw integer not null
 		)');
 	}
 }
