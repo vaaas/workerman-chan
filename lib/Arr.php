@@ -81,4 +81,14 @@ final class Arr implements IteratorAggregate {
 	public function has(mixed $x): bool {
 		return in_array($x, $this->entries);
 	}
+
+	/** @return T[] */
+	public function toArray(): array {
+		return $this->entries;
+	}
+
+	/** @return ?T */
+	public function first(): mixed {
+		return $this->entries[0];
+	}
 }
