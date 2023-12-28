@@ -25,6 +25,7 @@ final class Arr implements IteratorAggregate {
 		private array $entries = []
 	) {}
 
+	/** @return Traversable<int, T> */
 	public function getIterator(): Traversable {
 		return new ArrayIterator($this->entries);
 	}
