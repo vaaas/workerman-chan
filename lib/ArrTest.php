@@ -42,6 +42,12 @@ final class ArrTest extends TestCase {
 		$this->assertFalse($arr->has(4));
 	}
 
+	public function testHasNot(): void {
+		$arr = Arr::from([1, 2, 3]);
+		$this->assertTrue($arr->hasNot(4));
+		$this->assertFalse($arr->hasNot(1));
+	}
+
 	public function testFirst(): void {
 		$this->assertEquals(1, Arr::from([1, 2, 3])->first());
 		$this->assertEquals(null, Arr::from([])->first());
