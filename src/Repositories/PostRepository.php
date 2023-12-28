@@ -16,11 +16,12 @@ class PostRepository {
 	public function create(Post $post): Post {
 		$thread = $post->thread;
 		$board = $post->board;
-		$title = $this->db::escape($post->title);
+		$title = $post->title ? $this->db::escape($post->title) : 'null';
 		$contents = $this->db::escape($post->contents);
 		$created_at = $post->created_at->getTimestamp();
 
-		[$row] = $this->db->query("
+		/** @var array{id: int} */
+		$row = $this->db->query("
 			insert into posts (
 				thread,
 				board,
@@ -36,7 +37,7 @@ class PostRepository {
 				$created_at,
 			)
 			returning id
-		");
+		")->first();
 
 		return new Post(
 			$row['id'],
@@ -48,11 +49,11 @@ class PostRepository {
 		);
 	}
 
-	public function update(Post $post) {
+	public function update(Post $post): void {
 		$id = $post->id;
 		$thread = $post->thread;
 		$board = $post->board;
-		$title = $this->db::escape($post->title);
+		$title = $post->title ? $this->db::escape($post->title) : 'null';
 		$contents = $this->db::escape($post->contents);
 		$created_at = $post->created_at->getTimestamp();
 
