@@ -5,7 +5,6 @@ use App\Controllers\AttachmentController;
 use App\Controllers\IndexController;
 use App\Controllers\StaticController;
 use Lib\Http\Router as BaseRouter;
-use Workerman\Protocols\Http\Request;
 
 class Router extends BaseRouter {
 	public function __construct(
