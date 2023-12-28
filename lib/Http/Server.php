@@ -42,30 +42,30 @@ class Server {
 		else if ($response instanceof Throwable)
 			return self::fromError($response);
 		else if ($response instanceof Stringable)
-			return new Response(200, ['content-type' => 'text/plain'], $response->__toString());
+			return new Response(200, ['Content-Type' => 'text/plain'], $response->__toString());
 		else if (is_array($response))
 			return self::fromJson($response);
 		else if (is_string($response))
-			return new Response(200, ['content-type' => 'text/plain'], $response);
+			return new Response(200, ['Content-Type' => 'text/plain'], $response);
 		else if (is_numeric($response))
-			return new Response(200, ['content-type' => 'text/plain'], strval($response));
+			return new Response(200, ['Content-Type' => 'text/plain'], strval($response));
 		else {
 			$msg = 'Invalid return type. Expected one of string, int, array, JsonSerializable, Stringable, Throwable, Response, got ' . self::typeName($response);
 			error_log($msg);
-			return new Response(500, ['content-type' => 'text/plain'], $msg);
+			return new Response(500, ['Content-Type' => 'text/plain'], $msg);
 		}
 	}
 
 	/** @param JsonSerializable|array<mixed> $response */
 	private static function fromJson(JsonSerializable|array $response): Response {
-		return new Response(200, ['content-type' => 'application/json'], self::safeJsonEncode($response));
+		return new Response(200, ['Content-Type' => 'application/json'], self::safeJsonEncode($response));
 	}
 
 	private static function fromError(Throwable $error): Response {
 		$code = $error->getCode();
 		if ($code === 0)
 			$code = 500;
-		return new Response($code, ['content-type' => 'text/plain'], $error->getMessage());
+		return new Response($code, ['Content-Type' => 'text/plain'], $error->getMessage());
 	}
 
 	private static function errorLogString(Throwable $error): string {
