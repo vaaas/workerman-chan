@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Migrations\_00001_Initial;
+use App\Migrations\_00002_Seed;
 use Lib\Database\Sqlite;
 
 class Database extends Sqlite {
@@ -11,6 +12,8 @@ class Database extends Sqlite {
 
 		$this->migrate(
 			_00001_Initial::class,
+			_00002_Seed::class,
 		);
 	}
+
 }
