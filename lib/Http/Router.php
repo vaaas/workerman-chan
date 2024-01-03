@@ -57,11 +57,12 @@ class Router {
 	}
 
 	public function add(string $test, string $verb, callable $handler): Router {
-		$route = $this->routes->find(fn($x) => $x->test === $test);
-		if ($route)
-			$route->handlers->set($verb, $handler);
-		else
-			$this->routes->add(new Route($test, $verb, $handler));
+		$this->routes
+			->find(fn($x) => $x->test === $test)
+			->each(
+				fn() => $this->routes->add(new Route($test, $verb, $handler)),
+				fn($x) => $x->handlers->set($verb, $handler),
+			);
 		return $this;
 	}
 

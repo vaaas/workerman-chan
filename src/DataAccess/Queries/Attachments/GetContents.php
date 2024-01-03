@@ -5,6 +5,7 @@ use Stringable;
 use App\Entities\File;
 use Lib\Arr;
 use Lib\Database\IDatabase;
+use Lib\Option\IOption;
 
 class GetContents extends Base implements Stringable {
 	public function __construct(private int $id) {}
@@ -20,15 +21,19 @@ class GetContents extends Base implements Stringable {
 		";
 	}
 
-	public function commit(IDatabase $db): ?File {
+	/** @return IOption<File> */
+	public function commit(IDatabase $db): IOption {
+		/** @phpstan-ignore-next-line */
 		return $this->transform($db->query($this));
 	}
 
-	/** @var Arr<array{name: string, contents: string}> */
-	private function transform(Arr $results): ?File {
+	/**
+	 * @param Arr<array{name: string, contents: string}> $results
+	 * @return IOption<File>
+	 */
+	private function transform(Arr $results): IOption {
 		return $results
 			->first()
-			->map(fn($x) => new File($x['name'], $x['contents']))
-			->unwrap();
+			->map(fn($x) => new File($x['name'], $x['contents']));
 	}
 }

@@ -26,4 +26,19 @@ interface IOption {
 
 	/** @return ?T */
 	public function unwrap(): mixed;
+
+	/**
+	 * @param callable(): void $nothing
+	 * @param callable(T): void $something
+	 */
+	public function each(callable $nothing, callable $something): void;
+
+	/**
+	 * @template A
+	 * @template B
+	 * @param callable(): A $nothing
+	 * @param callable(T): B $something
+	 * @return A | B
+	 */
+	public function match(callable $nothing, callable $something): mixed;
 }

@@ -66,6 +66,8 @@ final class Container implements IContainer {
 
 		$reflection = new ReflectionClass($class);
 
+		/** @var ?class-string<T> */
+		$interface = null;
 		if ($reflection->isInterface()) {
 			$interface = $class;
 			if (!$this->interfaces->has($interface))
@@ -73,8 +75,7 @@ final class Container implements IContainer {
 			/** @var class-string */
 			$class = $this->interfaces->get($interface);
 			$reflection = new ReflectionClass($class);
-		} else
-			$interface = null;
+		}
 
 		$constructor = $reflection->getConstructor();
 		/** @var T */

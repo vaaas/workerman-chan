@@ -4,7 +4,7 @@ namespace App\Entities;
 use Lib\Mimetype\Mimetype;
 
 class Thumbnail {
-	public readonly Mimetype $mimetype;
+	public readonly string $mimetype;
 
 	public function __construct(
 		public string $contents,

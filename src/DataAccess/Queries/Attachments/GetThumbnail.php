@@ -5,6 +5,7 @@ use Stringable;
 use App\Entities\Thumbnail;
 use Lib\Arr;
 use Lib\Database\IDatabase;
+use Lib\Option\IOption;
 use Lib\Option\Option;
 
 final class GetThumbnail extends Base implements Stringable {
@@ -19,16 +20,22 @@ final class GetThumbnail extends Base implements Stringable {
 		";
 	}
 
-	/** @param Arr<array{thumbnail: ?string}> $results */
-	private function transform(Arr $results): ?Thumbnail {
+	/**
+	 * @param Arr<array{thumbnail: ?string}> $results
+	 * @return IOption<Thumbnail>
+	 */
+	private function transform(Arr $results): IOption {
 		return $results
 			->first()
 			->bind(fn($x) => Option::from($x['thumbnail']))
-			->map(fn($x) => new Thumbnail($x))
-			->unwrap();
+			->map(fn($x) => new Thumbnail($x));
 	}
 
-	public function commit(IDatabase $db): ?Thumbnail {
+	/**
+	 * @return IOption<Thumbnail>
+	 */
+	public function commit(IDatabase $db): IOption {
+		/** @phpstan-ignore-next-line */
 		return $this->transform($db->query($this));
 	}
 }

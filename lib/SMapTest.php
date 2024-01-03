@@ -6,6 +6,7 @@ final class SMapTest extends TestCase {
 	public function testHas(): void {
 		$map = new SMap(['a' => 1]);
 		$this->assertTrue($map->has('a'));
+		/** @phpstan-ignore-next-line */
 		$this->assertFalse($map->has('b'));
 	}
 

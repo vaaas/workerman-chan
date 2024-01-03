@@ -60,6 +60,7 @@ final class Arr implements IteratorAggregate {
 			if ($f($x))
 				return new Some($x);
 		}
+		/** @var Nothing<T> */
 		return new Nothing();
 	}
 

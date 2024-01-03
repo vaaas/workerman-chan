@@ -16,7 +16,7 @@ class Util {
 		'webp' => Mimetype::WEBP,
 	];
 
-	public static function fromExtension(string $pathname): Mimetype {
+	public static function fromExtension(string $pathname): string {
 		$ext = strtolower(Path::extension($pathname));
 		return array_key_exists($ext, self::EXTENSION_MAP)
 			? self::EXTENSION_MAP[$ext]

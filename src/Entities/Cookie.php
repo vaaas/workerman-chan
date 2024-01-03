@@ -2,16 +2,16 @@
 
 namespace App\Entities;
 use App\Entities\User;
+use App\Exceptions\HashException;
+use Exception;
 use JsonSerializable;
 
 class Cookie implements JsonSerializable {
-	public int $id;
-	public bool $is_admin;
 	private static string $cipher = 'aes-256-gcm';
 
 	public function __construct(public int $id, public bool $is_admin) {}
 
-	public static function forUser(User $user) {
+	public static function forUser(User $user): Cookie {
 		return new Cookie($user->id, $user->is_admin);
 	}
 
@@ -24,11 +24,21 @@ class Cookie implements JsonSerializable {
 	}
 
 	public function encode(string $passphrase): string {
-		openssl_encrypt(
-			json_encode($this),
+		$encoded = json_encode($this);
+
+		if ($encoded === false)
+			throw new Exception('Error encoding cookie');
+
+		$encrypted = openssl_encrypt(
+			$encoded,
 			self::$cipher,
 			$passphrase,
 		);
+
+		if ($encrypted === false)
+			throw new HashException();
+		else
+			return $encrypted;
 	}
 
 	public static function decode(string $encrypted, string $passphrase): ?Cookie {
@@ -41,12 +51,12 @@ class Cookie implements JsonSerializable {
 			return null;
 		$parsed = json_decode($decrypted, true);
 		if (!self::validate($parsed))
-			return false;
+			return null;
 		else
 			return new Cookie($parsed['id'], $parsed['is_admin']);
 	}
 
-	/** @phpstan-assert array{id: int, is_admin: bool} $x */
+	/** @phpstan-assert-if-true array{id: int, is_admin: bool} $x */
 	private static function validate(mixed $x): bool {
 		if (!is_array($x))
 			return false;
