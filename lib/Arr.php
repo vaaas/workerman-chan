@@ -4,6 +4,8 @@ namespace Lib;
 
 use ArrayIterator;
 use IteratorAggregate;
+use Lib\Option\IOption;
+use Lib\Option\Option;
 use Traversable;
 
 /**
@@ -92,8 +94,8 @@ final class Arr implements IteratorAggregate {
 		return $this->entries;
 	}
 
-	/** @return ?T */
-	public function first(): mixed {
-		return $this->entries[0];
+	/** @return IOption<T> */
+	public function first(): IOption {
+		return Option::from($this->entries[0]);
 	}
 }
