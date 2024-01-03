@@ -5,6 +5,9 @@ use App\Entities\User;
 use App\Exceptions\HashException;
 use Exception;
 use JsonSerializable;
+use Lib\Option\IOption;
+use Lib\Option\Nothing;
+use Lib\Option\Some;
 
 class Cookie implements JsonSerializable {
 	private static string $cipher = 'aes-256-gcm';
@@ -41,19 +44,22 @@ class Cookie implements JsonSerializable {
 			return $encrypted;
 	}
 
-	public static function decode(string $encrypted, string $passphrase): ?Cookie {
+	/** @return IOption<Cookie> */
+	public static function decode(string $encrypted, string $passphrase): IOption {
 		$decrypted = openssl_decrypt(
 			$encrypted,
 			self::$cipher,
 			$passphrase,
 		);
 		if ($decrypted === false)
-			return null;
+			/** @var Nothing<Cookie> */
+			return new Nothing();
 		$parsed = json_decode($decrypted, true);
 		if (!self::validate($parsed))
-			return null;
+			/** @var Nothing<Cookie> */
+			return new Nothing();
 		else
-			return new Cookie($parsed['id'], $parsed['is_admin']);
+			return new Some(new Cookie($parsed['id'], $parsed['is_admin']));
 	}
 
 	/** @phpstan-assert-if-true array{id: int, is_admin: bool} $x */
