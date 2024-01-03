@@ -31,6 +31,10 @@ class Some implements IOption {
 		return $this->x;
 	}
 
+	public function getOrThrow(?callable $f = null): mixed {
+		return $this->x;
+	}
+
 	public function each($_, $f): void {
 		$f($this->x);
 	}

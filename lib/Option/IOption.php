@@ -2,6 +2,8 @@
 
 namespace Lib\Option;
 
+use Exception;
+
 /** @template T */
 interface IOption {
 	/**
@@ -26,6 +28,12 @@ interface IOption {
 
 	/** @return ?T */
 	public function unwrap(): mixed;
+
+	/**
+	 * @param ?callable(): Exception $f
+	 * @return T
+	 */
+	public function getOrThrow(?callable $f = null): mixed;
 
 	/**
 	 * @param callable(): void $nothing

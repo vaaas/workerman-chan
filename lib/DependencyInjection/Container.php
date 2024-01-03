@@ -62,7 +62,7 @@ final class Container implements IContainer {
 	public function get(string $class): object {
 		if ($this->instances->has($class))
 			/** @var T */
-			return $this->instances->get($class);
+			return $this->instances->unsafeGet($class);
 
 		$reflection = new ReflectionClass($class);
 
@@ -70,10 +70,9 @@ final class Container implements IContainer {
 		$interface = null;
 		if ($reflection->isInterface()) {
 			$interface = $class;
-			if (!$this->interfaces->has($interface))
-				throw new Exception("Interface $interface does not have a registered implementation");
-			/** @var class-string */
-			$class = $this->interfaces->get($interface);
+			$class = $this->interfaces
+				->get($interface)
+				->getOrThrow(fn() => new Exception("Interface $interface does not have a registered implementation"));
 			$reflection = new ReflectionClass($class);
 		}
 
