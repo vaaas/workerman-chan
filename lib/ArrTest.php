@@ -49,7 +49,7 @@ final class ArrTest extends TestCase {
 	}
 
 	public function testFirst(): void {
-		$this->assertEquals(1, Arr::from([1, 2, 3])->first());
-		$this->assertEquals(null, Arr::from([])->first());
+		$this->assertEquals(1, Arr::from([1, 2, 3])->first()->unwrap());
+		$this->assertEquals(null, Arr::from([])->first()->unwrap());
 	}
 }

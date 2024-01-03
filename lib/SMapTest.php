@@ -13,14 +13,14 @@ final class SMapTest extends TestCase {
 	public function testGet(): void {
 		/** @var SMap<string, int> */
 		$map = new SMap(['a' => 1]);
-		$this->assertEquals(1, $map->get('a'));
-		$this->assertEquals(null, $map->get('b'));
+		$this->assertEquals(1, $map->get('a')->unwrap());
+		$this->assertEquals(null, $map->get('b')->unwrap());
 	}
 
 	public function testDelete(): void {
 		$map = new SMap(['a' => 1]);
 		$map->delete('a');
-		$this->assertEquals(null, $map->get('a'));
+		$this->assertEquals(null, $map->get('a')->unwrap());
 	}
 
 	public function testSet(): void {
