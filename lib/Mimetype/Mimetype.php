@@ -1,18 +1,18 @@
 <?php
 namespace Lib\Mimetype;
 
-enum Mimetype: string {
-	case HTML = 'text/html';
-	case TXT = 'text/plain';
+abstract class Mimetype {
+	const HTML = 'text/html';
+	const TXT = 'text/plain';
 
-	case JSON = 'application/json';
+	const JSON = 'application/json';
 
-	case AVIF = 'image/avif';
-	case GIF = 'image/gif';
-	case JPEG = 'image/jpeg';
-	case PNG = 'image/png';
-	case SVG = 'image/svg+xml';
-	case WEBP = 'image/webp';
+	const AVIF = 'image/avif';
+	const GIF = 'image/gif';
+	const JPEG = 'image/jpeg';
+	const PNG = 'image/png';
+	const SVG = 'image/svg+xml';
+	const WEBP = 'image/webp';
 
-	case BINARY = 'application/octet-stream';
+	const BINARY = 'application/octet-stream';
 }
