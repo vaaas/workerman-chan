@@ -1,31 +1,34 @@
 <?php
 namespace App\DataAccess\Queries\Users;
 
-use App\Database;
 use App\Entities\User;
 use Lib\Arr;
 use Lib\Database\IDatabase;
-use Stringable;
+use Lib\Database\Statement;
 
-class Create extends Base implements Stringable {
+final class Create extends Base {
 	public function __construct(private User $user) {}
 
-	public function __toString() {
-		$table = self::table;
-		$name = Database::quote(Database::escape($this->user->name));
-		$email = Database::quote(Database::escape($this->user->email));
-		$password = Database::quote(Database::escape($this->user->password));
-		$is_admin = $this->user->is_admin ? 1 : 0;
-		return "
-			insert into $table (name, email, password, is_admin)
-			values ($name, $email, $password, $is_admin)
-			returning id
-		";
+	public static function construct(User $user): Create {
+		return new Create($user);
+	}
+
+	private function statement(): Statement {
+		return new Statement(
+			"insert into :table values (:name, :email :password, :is_admin) returning id",
+			[
+				'table' => self::table,
+				'name' => $this->user->name,
+				'email' => $this->user->email,
+				'password' => $this->user->password,
+				'is_admin' => $this->user->is_admin ? 1 : 0,
+			]
+		);
 	}
 
 	public function commit(IDatabase $db): User {
 		/** @phpstan-ignore-next-line */
-		return $this->transform($db->query($this));
+		return $this->transform($db->query($this->statement()));
 	}
 
 	/** @param Arr<array{id: int}> $results */

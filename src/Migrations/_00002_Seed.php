@@ -2,21 +2,22 @@
 
 namespace App\Migrations;
 
+use App\DataAccess\Queries\Users\Create;
 use App\Entities\Password;
+use App\Entities\User;
 use Lib\Database\IDatabase;
 use Lib\Database\IMigration;
 
 class _00002_Seed implements IMigration {
 	public static function run(IDatabase $db): void {
-		$password = Password::hash('test')->password;
-		$db->exec("
-			insert into users (name, email, password, is_admin)
-			values (
+		Create
+			::construct(new User(
+				0,
 				'admin',
 				'test@example.com',
-				'$password',
-				1
-			)
-		");
+				Password::hash('test'),
+				true,
+			))
+			->commit($db);
 	}
 }

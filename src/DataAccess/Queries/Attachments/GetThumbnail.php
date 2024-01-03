@@ -1,23 +1,24 @@
 <?php
 namespace App\DataAccess\Queries\Attachments;
 
-use Stringable;
 use App\Entities\Thumbnail;
 use Lib\Arr;
 use Lib\Database\IDatabase;
+use Lib\Database\Statement;
 use Lib\Option\IOption;
 use Lib\Option\Option;
 
-final class GetThumbnail extends Base implements Stringable {
+final class GetThumbnail extends Base {
 	public function __construct(private int $id) {}
 
-	public function __toString(): string {
-		$table = self::table;
-		return "
-			select thumbnail
-			from {$table}
-			where post = {$this->id}
-		";
+	private function statement(): Statement {
+		return new Statement(
+			"select thumbnail from :table where post = :id",
+			[
+				'table' => self::table,
+				'id' => $this->id,
+			]
+		);
 	}
 
 	/**
@@ -36,6 +37,6 @@ final class GetThumbnail extends Base implements Stringable {
 	 */
 	public function commit(IDatabase $db): IOption {
 		/** @phpstan-ignore-next-line */
-		return $this->transform($db->query($this));
+		return $this->transform($db->query($this->statement()));
 	}
 }

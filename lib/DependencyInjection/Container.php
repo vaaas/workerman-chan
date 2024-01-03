@@ -3,7 +3,6 @@
 namespace Lib\DependencyInjection;
 
 use Closure;
-use Exception;
 use Lib\Arr;
 use Lib\DependencyInjection\IContainer;
 use Lib\SMap;
@@ -64,19 +63,14 @@ final class Container implements IContainer {
 			/** @var T */
 			return $this->instances->unsafeGet($class);
 
-		$reflection = new ReflectionClass($class);
-
 		/** @var ?class-string<T> */
 		$interface = null;
-		if ($reflection->isInterface()) {
+		if ($this->interfaces->has($class)) {
 			$interface = $class;
-			$class = $this->interfaces
-				->get($interface)
-				->getOrThrow(fn() => new Exception("Interface $interface does not have a registered implementation"));
-			$reflection = new ReflectionClass($class);
+			$class = $this->interfaces->unsafeGet($interface);
 		}
 
-		$constructor = $reflection->getConstructor();
+		$constructor = (new ReflectionClass($class))->getConstructor();
 		/** @var T */
 		$instance = is_null($constructor)
 			? new $class()
