@@ -3,8 +3,9 @@
 namespace App\Entities;
 
 use App\Exceptions\HashException;
+use Stringable;
 
-class Password {
+class Password implements Stringable {
 	public function __construct(public string $password) {}
 
 	public static function hash(string $raw): Password {
@@ -16,5 +17,9 @@ class Password {
 
 	public function match(string $raw): bool {
 		return password_verify($raw, $this->password);
+	}
+
+	public function __toString(): string {
+		return $this->password;
 	}
 }
