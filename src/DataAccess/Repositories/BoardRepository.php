@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\DataAccess\Repositories;
 
 class BoardRepository {
 	const table = 'boards';
