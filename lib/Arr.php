@@ -5,7 +5,9 @@ namespace Lib;
 use ArrayIterator;
 use IteratorAggregate;
 use Lib\Option\IOption;
+use Lib\Option\Nothing;
 use Lib\Option\Option;
+use Lib\Option\Some;
 use Traversable;
 
 /**
@@ -51,14 +53,14 @@ final class Arr implements IteratorAggregate {
 
 	/**
 	 * @param callable(T): bool $f
-	 * @return ?T
+	 * @return IOption<T>
 	 */
-	public function find(callable $f): mixed {
+	public function find(callable $f): IOption {
 		foreach ($this as $x) {
 			if ($f($x))
-				return $x;
+				return new Some($x);
 		}
-		return null;
+		return new Nothing();
 	}
 
 	public function count(): int {
