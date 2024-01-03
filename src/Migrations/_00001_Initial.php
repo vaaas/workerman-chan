@@ -30,5 +30,13 @@ class _00001_Initial implements IMigration {
 			thumbnail blob,
 			sfw integer not null
 		)');
+
+		$db->exec('create table users (
+			id integer primary key autoincrement,
+			name text unique not null,
+			email text unique not null,
+			password text not null,
+			is_admin integer not null
+		)');
 	}
 }
