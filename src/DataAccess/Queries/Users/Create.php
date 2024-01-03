@@ -12,12 +12,13 @@ class Create extends Base implements Stringable {
 
 	public function __toString() {
 		$table = self::table;
-		$name = Database::escape($this->user->name);
-		$email = Database::escape($this->user->email);
+		$name = Database::quote(Database::escape($this->user->name));
+		$email = Database::quote(Database::escape($this->user->email));
+		$password = Database::quote(Database::escape($this->user->password));
 		$is_admin = $this->user->is_admin ? 1 : 0;
 		return "
 			insert into $table (name, email, password, is_admin)
-			values ($name, $email, $is_admin)
+			values ($name, $email, $password, $is_admin)
 			returning id
 		";
 	}
