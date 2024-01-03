@@ -18,11 +18,16 @@ class Generator implements IteratorAggregate, JsonSerializable {
 
 	/**
 	 * @template X
-	 * @param iterable<int, X> $xs
+	 * @param iterable<int, X> | callable(): iterable<int, X> $xs
 	 * @return Generator<X>
 	 */
-	public static function from(iterable $xs): Generator {
-		return new Generator(is_array($xs) ? new ArrayIterator($xs) : $xs);
+	public static function from(iterable | callable $xs): Generator {
+		if (is_array($xs))
+			return new Generator(new ArrayIterator($xs));
+		else if (is_callable($xs))
+			return new Generator($xs());
+		else
+			return new Generator($xs);
 	}
 
 	/** @return Traversable<int, T> */
