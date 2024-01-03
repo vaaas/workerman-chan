@@ -16,4 +16,7 @@ class Database extends Sqlite {
 		);
 	}
 
+	public static function quote(string $x) {
+		return '\'' . $x . '\'';
+	}
 }
