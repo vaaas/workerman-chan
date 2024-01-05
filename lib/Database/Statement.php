@@ -7,7 +7,7 @@ use PDO;
 use PDOStatement;
 
 class Statement {
-	/** @param ?array<string, string|int> $params */
+	/** @param ?array<string, string|int|null> $params */
 	public function __construct(private string $query, private ?array $params = null) {}
 
 	private function prepare(PDO $db): PDOStatement {

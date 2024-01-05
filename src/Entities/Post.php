@@ -13,4 +13,15 @@ class Post {
 		public string $contents,
 		public DateTime $created_at = new DateTime(),
 	) {}
+
+	public function withId(int $id): Post {
+		return new Post(
+			$id,
+			$this->thread,
+			$this->board,
+			$this->title,
+			$this->contents,
+			$this->created_at
+		);
+	}
 }

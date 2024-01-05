@@ -35,13 +35,8 @@ final class Create extends Base {
 	private function transform(Arr $results): User {
 		return $results
 			->first()
-			->map(fn($x) => new User(
-				$x['id'],
-				$this->user->name,
-				$this->user->email,
-				$this->user->password,
-				$this->user->is_admin,
-			))
+			->map(fn($x) => $x['id'])
+			->map($this->user->withId(...))
 			->getOrThrow();
 	}
 }

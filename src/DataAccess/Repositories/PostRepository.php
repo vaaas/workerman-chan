@@ -1,9 +1,8 @@
 <?php
-
 namespace App\DataAccess\Repositories;
 
 use App\Entities\Post;
-use DateTime;
+use App\DataAccess\Queries\Posts;
 use Lib\Database\IDatabase;
 
 class PostRepository {
@@ -14,59 +13,10 @@ class PostRepository {
 	) {}
 
 	public function create(Post $post): Post {
-		$thread = $post->thread;
-		$board = $post->board;
-		$title = $post->title ? $this->db::escape($post->title) : 'null';
-		$contents = $this->db::escape($post->contents);
-		$created_at = $post->created_at->getTimestamp();
-
-		/** @var array{id: int} */
-		$row = $this->db->query("
-			insert into posts (
-				thread,
-				board,
-				title,
-				contents,
-				created_at
-			)
-			values (
-				$thread,
-				$board,
-				$title,
-				$contents,
-				$created_at,
-			)
-			returning id
-		")->first();
-
-		return new Post(
-			$row['id'],
-			$thread,
-			$board,
-			$title,
-			$contents,
-			new DateTime('@' . $created_at),
-		);
+		return (new Posts\Create($post))->commit($this->db);
 	}
 
-	public function update(Post $post): void {
-		$id = $post->id;
-		$thread = $post->thread;
-		$board = $post->board;
-		$title = $post->title ? $this->db::escape($post->title) : 'null';
-		$contents = $this->db::escape($post->contents);
-		$created_at = $post->created_at->getTimestamp();
-
-		$this->db->query("
-			update posts
-			set
-				thread = $thread,
-				board = $board,
-				title = $title,
-				contents = $contents,
-				created_at = $created_at
-			where
-				id = $id
-		");
+	public function update(Post $post): Post {
+		return (new Posts\Update($post))->commit($this->db);
 	}
 }
