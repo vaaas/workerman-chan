@@ -14,10 +14,10 @@ final class Create extends Base {
 	}
 
 	private function statement(): Statement {
+		$table = self::table;
 		return new Statement(
-			"insert into :table values (:name, :email :password, :is_admin) returning id",
+			"insert into $table values (null, :name, :email, :password, :is_admin) returning id",
 			[
-				'table' => self::table,
 				'name' => $this->user->name,
 				'email' => $this->user->email,
 				'password' => $this->user->password,
