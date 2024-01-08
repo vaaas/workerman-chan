@@ -28,16 +28,22 @@ class Database implements IDatabase {
 	public function migrate(string ...$migrations): void {
 		$this->exec(new Statement('create table if not exists migrations (migration text primary key)'));
 		/** @var Arr<class-string<IMigration>> */
-		$existing = $this->query(new Statement('select migrations.migration from migrations'));
-		$missing = Arr::from($migrations)->filter($existing->hasNot(...));
+		$existing = $this->query(new Statement('select migrations.migration from migrations'))
+			->map(fn($x) => $x['migration']);
+		$missing = Arr::from($migrations)
+			->filter(fn($x) => $existing->hasNot($this->shortName($x)));
 		if ($missing->empty())
 			return;
 		foreach ($missing as $migration) {
-			$short = (new ReflectionClass($migration))->getShortName();
+			$short = $this->shortName($migration);
 			error_log('Running migration: ' . $short);
 			$migration::run($this);
 			$statement = new Statement("insert into migrations values (:migration)", [ 'migration' => $short ]);
 			$this->exec($statement);
 		}
+	}
+
+	private function shortName(string $x): string {
+		return (new ReflectionClass($x))->getShortName();
 	}
 }

@@ -26,7 +26,7 @@ class _00002_Seed implements IMigration {
 			::construct(new Board(
 				0,
 				'b',
-				'random',
+				'Random',
 				'Anything goes!',
 			))
 			->commit($db);
