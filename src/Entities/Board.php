@@ -17,4 +17,8 @@ class Board {
 			$this->description,
 		);
 	}
+
+	public function slashedHandle(): string {
+		return '/' . $this->handle . '/';
+	}
 }

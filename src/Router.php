@@ -18,6 +18,7 @@ class Router extends BaseRouter {
 			->get('/', [$indexController, 'index'])
 			->get('/favicon.ico', [$staticController, 'serve'])
 			->get('/attachments/*', [$attachmentController, 'getAttachment'])
-			->get('/thumbnails/*', [$attachmentController, 'getThumbnail']);
+			->get('/thumbnails/*', [$attachmentController, 'getThumbnail'])
+			->get('/*/', fn() => 'hello, world!');
 	}
 }

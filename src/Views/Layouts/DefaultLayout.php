@@ -1,7 +1,9 @@
 <?php
 namespace App\Views\Layouts;
 
-final class DefaultLayout {
+use Stringable;
+
+final class DefaultLayout implements Stringable {
 	public function __construct(
 		private string $title = '',
 		private string $body = '',
@@ -38,5 +40,9 @@ final class DefaultLayout {
 				</body>
 			</html>
 		EOF;
+	}
+
+	public function __toString(): string {
+		return $this->render();
 	}
 }

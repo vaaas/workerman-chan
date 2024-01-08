@@ -7,7 +7,7 @@ use Lib\Database\IDatabase;
 use Lib\Database\Statement;
 
 class Create extends Base {
-	public function __construct(public Board $board) {}
+	public function __construct(private Board $board) {}
 
 	public static function construct(Board $board): Create {
 		return new Create($board);

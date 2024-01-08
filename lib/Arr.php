@@ -101,4 +101,8 @@ final class Arr implements IteratorAggregate {
 	public function first(): IOption {
 		return Option::from($this->entries[0]);
 	}
+
+	public function join(string $d = ''): string {
+		return implode($d, $this->entries);
+	}
 }
