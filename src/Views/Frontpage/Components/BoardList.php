@@ -1,5 +1,5 @@
 <?php
-namespace App\Views;
+namespace App\Views\Frontpage\Components;
 
 use App\Entities\Board;
 use Lib\Arr;

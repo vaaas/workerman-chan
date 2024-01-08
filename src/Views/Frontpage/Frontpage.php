@@ -1,8 +1,9 @@
 <?php
-namespace App\Views;
+namespace App\Views\Frontpage;
 
 use App\Entities\Board;
 use App\Views\Layouts\DefaultLayout;
+use App\Views\Frontpage\Components\BoardList;
 use Lib\Arr;
 use Stringable;
 

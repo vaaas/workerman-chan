@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Config;
 use App\DataAccess\Repositories\BoardRepository;
-use App\Views\Frontpage;
+use App\Views\Frontpage\Frontpage;
 use Workerman\Protocols\Http\Response;
 
 final class IndexController {

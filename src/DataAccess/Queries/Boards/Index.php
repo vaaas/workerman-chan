@@ -23,6 +23,11 @@ class Index extends Base {
 	 * @return Arr<Board>
 	 */
 	private function transform(Arr $results): Arr {
-		return $results->map(fn($x) => new Board($x['id'], $x['handle'], $x['title'], $x['description']));
+		return $results->map(fn($x) => new Board(
+			$x['id'],
+			$x['handle'],
+			$x['title'],
+			$x['description'],
+		));
 	}
 }

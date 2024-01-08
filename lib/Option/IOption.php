@@ -21,8 +21,9 @@ interface IOption {
 	public function bind(callable $f): IOption;
 
 	/**
-	 * @param T $d
-	 * @return T
+	 * @template U
+	 * @param U $d
+	 * @return T|U
 	 */
 	public function fold(mixed $d): mixed;
 
