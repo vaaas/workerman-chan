@@ -43,6 +43,7 @@ class Database implements IDatabase {
 		}
 	}
 
+	/** @param class-string $x */
 	private function shortName(string $x): string {
 		return (new ReflectionClass($x))->getShortName();
 	}
