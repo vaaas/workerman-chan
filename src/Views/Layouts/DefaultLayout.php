@@ -26,7 +26,7 @@ final class DefaultLayout implements Stringable {
 		return $this;
 	}
 
-	public function render(): string {
+	public function __toString(): string {
 		return <<<EOF
 			<!DOCTYPE html>
 			<html>
@@ -40,9 +40,5 @@ final class DefaultLayout implements Stringable {
 				</body>
 			</html>
 		EOF;
-	}
-
-	public function __toString(): string {
-		return $this->render();
 	}
 }

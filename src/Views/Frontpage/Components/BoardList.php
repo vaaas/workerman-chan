@@ -2,29 +2,23 @@
 namespace App\Views\Frontpage\Components;
 
 use App\Entities\Board;
+use App\Views\Element;
 use Lib\Arr;
-use Stringable;
+use Lib\SMap;
 
-class BoardList implements Stringable {
+class BoardList extends Element {
 	/** @param Arr<Board> $boards */
-	public function __construct(private Arr $boards) {}
-
-	public function render(): string {
-		$items = $this->boards
-			->map($this->renderItem(...))
-			->join('');
-		return "<ul>$items</ul>";
+	public function __construct(Arr $boards) {
+		parent::__construct(
+			'ul',
+			new SMap(),
+			$boards->map($this->renderBoard(...))
+		);
 	}
 
-	public function __toString(): string {
-		return $this->render();
-	}
-
-	private function renderItem(Board $x): string {
-		return <<<EOF
-			<li>
-				<a href='{$x->slashedHandle()}'>{$x->slashedHandle()} - {$x->title}</a>
-			</li>
-		EOF;
+	private function renderBoard(Board $x) {
+		return Element::construct('a')
+			->prop('href', $x->slashedHandle())
+			->child("{$x->slashedHandle()} - {$x->title}");
 	}
 }

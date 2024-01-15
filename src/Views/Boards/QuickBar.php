@@ -2,23 +2,23 @@
 namespace App\Views\Boards;
 
 use App\Entities\Board;
+use App\Views\Element;
 use Lib\Arr;
-use Stringable;
+use Lib\SMap;
 
-class QuickBar implements Stringable {
+class QuickBar extends Element {
 	/** @param Arr<Board> $boards */
-	public function __construct(private Arr $boards) {}
-
-	public function __toString(): string {
-		return $this->render();
-	}
-
-	public function render(): string {
-		$boards = $this->boards->map($this->renderBoard(...))->join(' / ');
-		return "<nav>$boards</nav>";
+	public function __construct(Arr $boards) {
+		parent::__construct(
+			'nav',
+			new SMap(),
+			$boards->map($this->renderBoard(...))
+		);
 	}
 
 	private function renderBoard(Board $x): string {
-		return "<a href='{$x->slashedHandle()}'>{$x->handle}</a>";
+		return Element::construct('a')
+			->prop('href', $x->slashedHandle())
+			->child($x->handle);
 	}
 }

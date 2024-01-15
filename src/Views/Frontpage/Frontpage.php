@@ -2,6 +2,7 @@
 namespace App\Views\Frontpage;
 
 use App\Entities\Board;
+use App\Views\Element;
 use App\Views\Layouts\DefaultLayout;
 use App\Views\Frontpage\Components\BoardList;
 use Lib\Arr;
@@ -22,16 +23,13 @@ final class Frontpage implements Stringable {
 		return new Frontpage($title, $boards);
 	}
 
-	public function render(): string {
-		$title = "<h1>Welcome to {$this->title}</h1>";
+	public function __toString(): string {
+		$title = Element
+			::construct('h1')
+			->child("Welcome to {$this->title}!");
 		$boards = new BoardList($this->boards);
 		return DefaultLayout::construct()
 			->body("$title $boards")
-			->title($this->title)
-			->render();
-	}
-
-	public function __toString(): string {
-		return $this->render();
+			->title($this->title);
 	}
 }

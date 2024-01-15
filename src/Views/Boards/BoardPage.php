@@ -20,9 +20,10 @@ class BoardPage implements Stringable{
 	public function render(): string {
 		$banner = new Banner($this->board);
 		$quickbar = new QuickBar($this->boards);
+		$threadform = new ThreadForm();
 		return new DefaultLayout(
 			$this->board->title,
-			"$quickbar $banner",
+			"$quickbar $banner $threadform",
 		);
 	}
 }
