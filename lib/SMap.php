@@ -57,4 +57,12 @@ final class SMap implements IteratorAggregate {
 	public function getIterator(): Traversable {
 		return new ArrayIterator($this->entries);
 	}
+
+	/** @return Arr<array{K, V}> */
+	public function entries(): Arr {
+		$xs = [];
+		foreach ($this as $k => $v)
+			array_push($xs, [$k, $v]);
+		return new Arr($xs);
+	}
 }
