@@ -24,8 +24,8 @@ class Element implements Stringable {
 		string $tag = 'div',
 		SMap $properties = new SMap(),
 		Arr $children = new Arr(),
-	): static {
-		return new static($tag, $properties, $children);
+	): Element {
+		return new Element($tag, $properties, $children);
 	}
 
 	public function __toString(): string {

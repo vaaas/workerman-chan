@@ -9,10 +9,9 @@ class Form extends Element {
 		string $action = '',
 		string $method = 'get',
 	) {
-		parent::__construct(
-			'form',
-			new SMap(['action' => $action, 'method' => $method])
-		);
+		parent::__construct('form');
+		$this->prop('action', $action);
+		$this->prop('method', $method);
 	}
 
 	public function __toString(): string {

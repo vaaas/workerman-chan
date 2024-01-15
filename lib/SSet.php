@@ -7,7 +7,7 @@ use Traversable;
 
 /**
  * @template K of string
- * @implements IteratorAggregate of <int, K>
+ * @implements IteratorAggregate<int, K>
  */
 class SSet implements IteratorAggregate {
 	/** @param array<string, true> $entries */
@@ -17,11 +17,13 @@ class SSet implements IteratorAggregate {
 		return new ArrayIterator($this->toArray());
 	}
 
+	/** @return SSet<K> */
 	public function add(string $x): self {
 		$this->entries[$x] = true;
 		return $this;
 	}
 
+	/** @return SSet<K> */
 	public function delete(string $x): self {
 		unset($this->entries[$x]);
 		return $this;
@@ -31,8 +33,9 @@ class SSet implements IteratorAggregate {
 		return array_key_exists($x, $this->entries);
 	}
 
-	/** @return string[] */
+	/** @return array<int, K> */
 	public function toArray(): array {
+		/** @var array<int, K> */
 		return array_keys($this->entries);
 	}
 

@@ -6,13 +6,13 @@ use Exception;
 /** @template T */
 abstract class Option {
 	/**
-	 * @template T
-	 * @param ?T $x
-	 * @return Option<T>
+	 * @template X
+	 * @param ?X $x
+	 * @return Option<X>
 	 */
 	public static function from(mixed $x): Option {
 		if (is_null($x))
-			/** @var Nothing<T> */
+			/** @var Nothing<X> */
 			return new Nothing();
 		else
 			return new Some($x);

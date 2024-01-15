@@ -16,7 +16,7 @@ class BoardList extends Element {
 		);
 	}
 
-	private function renderBoard(Board $x) {
+	private function renderBoard(Board $x): string {
 		return Element::construct('a')
 			->prop('href', $x->slashedHandle())
 			->child("{$x->slashedHandle()} - {$x->title}");

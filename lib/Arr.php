@@ -105,6 +105,7 @@ final class Arr implements IteratorAggregate {
 		return implode($d, $this->entries);
 	}
 
+	/** @return Arr<T> */
 	public function unique(): Arr {
 		return new Arr(array_values(array_unique($this->entries)));
 	}
