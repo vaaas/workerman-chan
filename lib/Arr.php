@@ -105,4 +105,14 @@ final class Arr implements IteratorAggregate {
 	public function join(string $d = ''): string {
 		return implode($d, $this->entries);
 	}
+
+	public function unique(): Arr {
+		return new Arr(array_values(array_unique($this->entries)));
+	}
+
+	/** @param callable(T): void $f */
+	public function each(callable $f): void {
+		foreach ($this as $x)
+			$f($x);
+	}
 }
