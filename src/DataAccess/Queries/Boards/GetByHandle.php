@@ -5,13 +5,13 @@ use App\Entities\Board;
 use Lib\Arr;
 use Lib\Database\IDatabase;
 use Lib\Database\Statement;
-use Lib\Option\IOption;
+use Lib\Option\Option;
 
 class GetByHandle extends Base {
 	public function __construct(private string $handle) {}
 
-	/** @return IOption<Board> */
-	public function commit(IDatabase $db): IOption {
+	/** @return Option<Board> */
+	public function commit(IDatabase $db): Option {
 		/** @phpstan-ignore-next-line */
 		return $this->transform($db->query($this->statement()));
 	}
@@ -28,9 +28,9 @@ class GetByHandle extends Base {
 
 	/**
 	 * @param Arr<array{id: int, handle: string, title: string, description: string}> $results
-	 * @return IOption<Board>
+	 * @return Option<Board>
 	 */
-	private function transform(Arr $results): IOption {
+	private function transform(Arr $results): Option {
 		return $results
 			->first()
 			->map(fn($x) => new Board(

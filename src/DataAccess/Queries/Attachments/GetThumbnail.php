@@ -5,7 +5,6 @@ use App\Entities\Thumbnail;
 use Lib\Arr;
 use Lib\Database\IDatabase;
 use Lib\Database\Statement;
-use Lib\Option\IOption;
 use Lib\Option\Option;
 
 final class GetThumbnail extends Base {
@@ -23,9 +22,9 @@ final class GetThumbnail extends Base {
 
 	/**
 	 * @param Arr<array{thumbnail: ?string}> $results
-	 * @return IOption<Thumbnail>
+	 * @return Option<Thumbnail>
 	 */
-	private function transform(Arr $results): IOption {
+	private function transform(Arr $results): Option {
 		return $results
 			->first()
 			->bind(fn($x) => Option::from($x['thumbnail']))
@@ -33,9 +32,9 @@ final class GetThumbnail extends Base {
 	}
 
 	/**
-	 * @return IOption<Thumbnail>
+	 * @return Option<Thumbnail>
 	 */
-	public function commit(IDatabase $db): IOption {
+	public function commit(IDatabase $db): Option {
 		/** @phpstan-ignore-next-line */
 		return $this->transform($db->query($this->statement()));
 	}

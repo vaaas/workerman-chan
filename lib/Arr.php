@@ -4,7 +4,6 @@ namespace Lib;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Lib\Option\IOption;
 use Lib\Option\Nothing;
 use Lib\Option\Option;
 use Lib\Option\Some;
@@ -53,9 +52,9 @@ final class Arr implements IteratorAggregate {
 
 	/**
 	 * @param callable(T): bool $f
-	 * @return IOption<T>
+	 * @return Option<T>
 	 */
-	public function find(callable $f): IOption {
+	public function find(callable $f): Option {
 		foreach ($this as $x) {
 			if ($f($x))
 				return new Some($x);
@@ -97,9 +96,9 @@ final class Arr implements IteratorAggregate {
 		return $this->entries;
 	}
 
-	/** @return IOption<T> */
-	public function first(): IOption {
-		return Option::from($this->entries[0]);
+	/** @return Option<T> */
+	public function first(): Option {
+		return Option::from(@$this->entries[0]);
 	}
 
 	public function join(string $d = ''): string {

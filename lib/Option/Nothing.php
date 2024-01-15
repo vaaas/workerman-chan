@@ -2,13 +2,12 @@
 namespace Lib\Option;
 
 use Exception;
-use PhpParser\Node\Expr\Exit_;
 
 /**
  * @template T
- * @implements IOption<T>
+ * @extends Option<T>
  */
-class Nothing implements IOption {
+class Nothing extends Option {
 	/**
 	 * @template U
 	 * @param callable(T): U $f
@@ -20,7 +19,7 @@ class Nothing implements IOption {
 
 	/**
 	 * @template U
-	 * @param callable(T): IOption<U> $f
+	 * @param callable(T): Option<U> $f
 	 * @return Nothing<U>
 	 */
 	public function bind(callable $f): Nothing {

@@ -5,7 +5,7 @@ use App\DataAccess\Queries\Boards;
 use App\Entities\Board;
 use Lib\Arr;
 use Lib\Database\IDatabase;
-use Lib\Option\IOption;
+use Lib\Option\Option;
 
 class BoardRepository {
 	public function __construct(private IDatabase $db) {}
@@ -15,8 +15,8 @@ class BoardRepository {
 		return (new Boards\Index())->commit($this->db);
 	}
 
-	/** @return IOption<Board> */
-	public function getByHandle(string $handle): IOption {
+	/** @return Option<Board> */
+	public function getByHandle(string $handle): Option {
 		return (new Boards\GetByHandle($handle))->commit($this->db);
 	}
 }

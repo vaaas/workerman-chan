@@ -5,7 +5,7 @@ use App\Entities\User;
 use App\Exceptions\HashException;
 use Exception;
 use JsonSerializable;
-use Lib\Option\IOption;
+use Lib\Option\Option;
 use Lib\Option\Nothing;
 use Lib\Option\Some;
 
@@ -44,8 +44,8 @@ class Cookie implements JsonSerializable {
 			return $encrypted;
 	}
 
-	/** @return IOption<Cookie> */
-	public static function decode(string $encrypted, string $passphrase): IOption {
+	/** @return Option<Cookie> */
+	public static function decode(string $encrypted, string $passphrase): Option {
 		$decrypted = openssl_decrypt(
 			$encrypted,
 			self::$cipher,

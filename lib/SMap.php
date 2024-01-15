@@ -4,7 +4,6 @@ namespace Lib;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Lib\Option\IOption;
 use Lib\Option\Option;
 use Traversable;
 
@@ -26,10 +25,10 @@ final class SMap implements IteratorAggregate {
 
 	/**
 	 * @param K $k
-	 * @return IOption<V>
+	 * @return Option<V>
 	 */
-	public function get(string $k): IOption {
-		return Option::from($this->entries[$k]);
+	public function get(string $k): Option {
+		return Option::from(@$this->entries[$k]);
 	}
 
 	/**

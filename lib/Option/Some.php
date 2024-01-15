@@ -3,9 +3,9 @@ namespace Lib\Option;
 
 /**
  * @template T
- * @implements IOption<T>
+ * @extends Option<T>
  */
-class Some implements IOption {
+class Some extends Option {
 	/** @param T $x */
 	public function __construct(private mixed $x) {}
 
@@ -18,7 +18,7 @@ class Some implements IOption {
 		return new Some($f($this->x));
 	}
 
-	public function bind(callable $f): IOption {
+	public function bind(callable $f): Option {
 		return $f($this->x);
 	}
 

@@ -5,7 +5,7 @@ use App\Entities\File;
 use Lib\Arr;
 use Lib\Database\IDatabase;
 use Lib\Database\Statement;
-use Lib\Option\IOption;
+use Lib\Option\Option;
 
 class GetContents extends Base {
 	public function __construct(private int $id) {}
@@ -20,17 +20,17 @@ class GetContents extends Base {
 		);
 	}
 
-	/** @return IOption<File> */
-	public function commit(IDatabase $db): IOption {
+	/** @return Option<File> */
+	public function commit(IDatabase $db): Option {
 		/** @phpstan-ignore-next-line */
 		return $this->transform($db->query($this->statement()));
 	}
 
 	/**
 	 * @param Arr<array{name: string, contents: string}> $results
-	 * @return IOption<File>
+	 * @return Option<File>
 	 */
-	private function transform(Arr $results): IOption {
+	private function transform(Arr $results): Option {
 		return $results
 			->first()
 			->map(fn($x) => new File($x['name'], $x['contents']));
